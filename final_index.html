@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Talks 2025</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        main {
+            padding: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            margin-bottom: 1rem;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .schedule-container {
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .talk {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .talk:last-child {
+            border-bottom: none;
+        }
+
+        .talk-time {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .talk-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .talk-speakers {
+            font-style: italic;
+            color: #555;
+        }
+
+        .talk-category {
+            margin-top: 0.5rem;
+        }
+
+        .talk-category span {
+            background: #333;
+            color: #fff;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        .break {
+            background: #f4f4f4;
+            text-align: center;
+            padding: 1rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tech Talks 2025</h1>
+        <p>A One-Day Technical Conference</p>
+    </header>
+    <main>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search by category...">
+        </div>
+        <div id="schedule" class="schedule-container">
+            <!-- Schedule will be dynamically generated here -->
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const talks = [
+                {
+                    time: '10:00 AM - 11:00 AM',
+                    title: 'The Future of Artificial Intelligence',
+                    speakers: ['Dr. Evelyn Reed'],
+                    categories: ['AI', 'Machine Learning'],
+                    description: 'A deep dive into the latest advancements in AI and what to expect in the coming years.'
+                },
+                {
+                    time: '11:10 AM - 12:10 PM',
+                    title: 'Building Scalable Web Applications',
+                    speakers: ['John Doe', 'Jane Smith'],
+                    categories: ['Web Development', 'Scalability'],
+                    description: 'Learn the best practices for designing and building web applications that can handle millions of users.'
+                },
+                {
+                    time: '12:10 PM - 1:10 PM',
+                    title: 'Lunch Break',
+                    isBreak: true
+                },
+                {
+                    time: '1:10 PM - 2:10 PM',
+                    title: 'Cybersecurity in the Modern Age',
+                    speakers: ['Alex Williams'],
+                    categories: ['Cybersecurity', 'InfoSec'],
+                    description: 'An overview of the current cybersecurity landscape and how to protect your organization from threats.'
+                },
+                {
+                    time: '2:20 PM - 3:20 PM',
+                    title: 'The Power of Quantum Computing',
+                    speakers: ['Dr. Ben Carter'],
+                    categories: ['Quantum Computing', 'Physics'],
+                    description: 'Explore the mind-bending world of quantum computing and its potential to revolutionize technology.'
+                },
+                {
+                    time: '3:30 PM - 4:30 PM',
+                    title: 'Data Visualization for Storytelling',
+                    speakers: ['Chloe Garcia'],
+                    categories: ['Data Science', 'Visualization'],
+                    description: 'Discover how to use data visualization to tell compelling stories and communicate insights effectively.'
+                },
+                {
+                    time: '4:40 PM - 5:40 PM',
+                    title: 'The Ethics of AI',
+                    speakers: ['Dr. Isabella Rossi'],
+                    categories: ['AI', 'Ethics'],
+                    description: 'A thought-provoking discussion on the ethical implications of artificial intelligence and how we can ensure its responsible development.'
+                }
+            ];
+
+            const scheduleContainer = document.getElementById('schedule');
+            const searchInput = document.getElementById('searchInput');
+
+            function renderSchedule(filter = '') {
+                scheduleContainer.innerHTML = '';
+                const filteredTalks = talks.filter(talk => {
+                    if (talk.isBreak) return true;
+                    if (filter === '') return true;
+                    return talk.categories.some(category => category.toLowerCase().includes(filter.toLowerCase()));
+                });
+
+                filteredTalks.forEach(talk => {
+                    const talkElement = document.createElement('div');
+                    if (talk.isBreak) {
+                        talkElement.className = 'break';
+                        talkElement.innerHTML = `<div class="talk-time">${talk.time}</div><div>${talk.title}</div>`;
+                    } else {
+                        talkElement.className = 'talk';
+                        talkElement.innerHTML = `
+                            <div class="talk-time">${talk.time}</div>
+                            <div class="talk-title">${talk.title}</div>
+                            <div class="talk-speakers">By: ${talk.speakers.join(', ')}</div>
+                            <div class="talk-description">${talk.description}</div>
+                            <div class="talk-category">
+                                ${talk.categories.map(cat => `<span>${cat}</span>`).join('')}
+                            </div>
+                        `;
+                    }
+                    scheduleContainer.appendChild(talkElement);
+                });
+            }
+
+            searchInput.addEventListener('input', (e) => {
+                renderSchedule(e.target.value);
+            });
+
+            renderSchedule();
+        });
+    </script>
+</body>
+</html>
